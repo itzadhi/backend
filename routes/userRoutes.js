@@ -3,6 +3,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  verifiedUser,
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -12,6 +13,9 @@ router.route('/register').post(registerUser);
 
 // @desc  Login
 router.route('/login').post(loginUser);
+
+// @desc  verifiy user
+router.route('/verify-email/:id').get(verifiedUser);
 
 // @desc  Logout
 router.post('/logout', logoutUser);

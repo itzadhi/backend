@@ -1,20 +1,20 @@
-import mailTransporter from './mailTransporter.js';
+import { mailTransporter } from './mailTransporter.js';
 
-const sendActivationMail = (user) => {
+const sendActivationMail = (name, email, verifyID) => {
   const transporter = mailTransporter();
 
   let mailDetails = {
     from: 'adhithyanalan1@outlook.com',
-    to: user.email,
+    to: email,
     subject: 'Activate your account',
-    html: `<p>Hello ${user.name} 👋</p> 
+    html: `<p>Hello ${name} 👋</p> 
     <p>Please click the below link to activate your account.</p>
-    <a href="${process.env.Client_URL}/user/verify-email/${user.userName}" target="_blank">Activate</a>`,
+    <a href="${process.env.Client_URL}/user/verify-email/${verifyID}" target="_blank">Activate</a>`,
   };
 
   transporter.sendMail(mailDetails, (err, data) => {
     if (err) {
-      console.log('Error');
+      console.log('Error in sending mail');
     } else {
       console.log('Email sent successfully');
     }

@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 const mailTransporter = () => {
-  nodemailer.createTransport({
+  return nodemailer.createTransport({
     service: 'outlook',
     auth: {
       user: 'adhithyanalan1@outlook.com',
