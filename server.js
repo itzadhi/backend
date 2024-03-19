@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 
 app.get('/', (req, res) => {

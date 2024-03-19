@@ -38,6 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      userName: user.userName,
       isEmailVerified: user.isEmailVerified,
     });
   } else {
@@ -50,9 +51,9 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /user/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { userName, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ userName });
 
   if (user && (await user.matchPassword(password))) {
     if (!user?.isEmailVerified) {
@@ -72,6 +73,7 @@ const loginUser = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        userName: user.userName,
         isEmailVerified: user.isEmailVerified,
       });
     }
