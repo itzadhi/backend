@@ -28,6 +28,9 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    tempPassword: {
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -4,7 +4,7 @@ const sendActivationMail = (name, email, verifyID) => {
   const transporter = mailTransporter();
 
   let mailDetails = {
-    from: 'adhithyanalan1@outlook.com',
+    from: 'adhithyanalan@gmail.com',
     to: email,
     subject: 'Activate your account',
     html: `<p>Hello ${name} 👋</p> 
@@ -14,7 +14,7 @@ const sendActivationMail = (name, email, verifyID) => {
 
   transporter.sendMail(mailDetails, (err, data) => {
     if (err) {
-      console.log('Error in sending mail');
+      console.log(err, 'Error in sending mail');
     } else {
       console.log('Email sent successfully');
     }

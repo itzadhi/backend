@@ -1,7 +1,9 @@
 import express from 'express';
 import {
+  forgotPassword,
   loginUser,
   logoutUser,
+  newPassword,
   registerUser,
   verifiedUser,
 } from '../controllers/userController.js';
@@ -15,7 +17,13 @@ router.route('/register').post(registerUser);
 router.route('/login').post(loginUser);
 
 // @desc  verifiy user
-router.route('/verify-email/:id').get(verifiedUser);
+router.route('/verify-email').put(verifiedUser);
+
+// @desc  New Password
+router.route('/new-password').put(newPassword);
+
+// @desc  Forgot Password
+router.route('/forgot-password').put(forgotPassword);
 
 // @desc  Logout
 router.post('/logout', logoutUser);

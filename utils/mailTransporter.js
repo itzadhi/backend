@@ -2,9 +2,12 @@ import nodemailer from 'nodemailer';
 
 const mailTransporter = () => {
   return nodemailer.createTransport({
-    service: 'outlook',
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
     auth: {
-      user: 'adhithyanalan1@outlook.com',
+      user: 'adhithyanalan@gmail.com',
       pass: process.env.MAILER_PASS,
     },
   });
