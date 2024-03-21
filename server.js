@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
+import urlRoutes from './routes/urlRoutes.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/user', userRoutes);
+app.use('/url', urlRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
