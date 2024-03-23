@@ -21,7 +21,7 @@ const shortenUrl = asyncHandler(async (req, res) => {
   }
 
   const shortenUrlId = shortid();
-  const shortUrl = `${process.env.SERVER_URL}/url/${shortenUrlId}`;
+  const shortUrl = `${process.env.SERVER_URL}/url/new/${shortenUrlId}`;
   const url = await Url.create({
     originalUrl: longUrl,
     shortenUrl: shortUrl,
