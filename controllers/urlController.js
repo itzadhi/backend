@@ -13,13 +13,6 @@ const shortenUrl = asyncHandler(async (req, res) => {
     throw new Error('Enter url is not valid, please enter the correct url');
   }
 
-  const urlExists = await Url.findOne({ originalUrl: longUrl });
-
-  if (urlExists) {
-    res.status(400);
-    throw new Error('Url already exists');
-  }
-
   const shortenUrlId = shortid();
   const shortUrl = `${process.env.SERVER_URL}/url/new/${shortenUrlId}`;
   const url = await Url.create({
