@@ -57,8 +57,8 @@ const redirectUrl = asyncHandler(async (req, res) => {
 });
 
 const getUrls = asyncHandler(async (req, res) => {
-  const urls = await Url.find({});
-  console.log('qq', urls);
+  const urls = await Url.find({ user: req?.user?._id });
+
   if (urls) {
     res.json(urls);
   } else {

@@ -18,12 +18,10 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists');
   }
 
-  const userName = email.split('@');
-
   const user = await User.create({
     firstName,
     lastName,
-    userName: userName?.[0],
+    userName: email,
     email,
     password,
   });
@@ -53,9 +51,9 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /user/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { userName, password } = req.body;
+  const { email, password } = req.body;
 
-  const user = await User.findOne({ userName });
+  const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
     if (!user?.isEmailVerified) {
@@ -89,10 +87,11 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Verify User for email verification
+// @route   PUT /user/verify-user
+// @access  Private
 const verifiedUser = asyncHandler(async (req, res) => {
   const { userId } = req.body;
-
-  console.log('aa', userId);
 
   const user = await User.findById(userId);
 
@@ -118,12 +117,15 @@ const verifiedUser = asyncHandler(async (req, res) => {
 
 // @desc    Logout user and clear cookie
 // @route   POST /user/logout
-// @access  Public
+// @access  Private
 const logoutUser = asyncHandler(async (req, res) => {
   res.clearCookie('jwt');
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
+// @desc    New Password
+// @route   PUT /user/new-password
+// @access  Private
 const newPassword = asyncHandler(async (req, res) => {
   const { tempToken, password } = req.body;
 
@@ -150,12 +152,14 @@ const newPassword = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Forgot Password
+// @route   POST /user/forgot-password
+// @access  Public
 const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
 
-  console.log('aaa', user);
   if (user) {
     const name = `${user.firstName}  ${user.lastName}`;
     const email = user.email;
