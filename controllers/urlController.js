@@ -57,7 +57,6 @@ const redirectUrl = asyncHandler(async (req, res) => {
 });
 
 const getUrls = asyncHandler(async (req, res) => {
-  console.log('22', req?.user);
   const urls = await Url.find({ user: req?.user?._id });
 
   if (urls) {
