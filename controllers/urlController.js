@@ -1,10 +1,11 @@
 import Url from '../models/Url.js';
+import Clicks from '../models/Clicks.js';
 import validUrl from 'valid-url';
 import shortid from 'shortid';
 import asyncHandler from '../middleware/asyncHandler.js';
 
 const shortenUrl = asyncHandler(async (req, res) => {
-  const { longUrl } = req.body;
+  const { title, longUrl } = req.body;
 
   const validateUrl = validUrl.isUri(longUrl);
 
@@ -14,8 +15,9 @@ const shortenUrl = asyncHandler(async (req, res) => {
   }
 
   const shortenUrlId = shortid();
-  const shortUrl = `${process.env.SERVER_URL}/url/new/${shortenUrlId}`;
+  const shortUrl = `${process.env.SERVER_URL}/${shortenUrlId}`;
   const url = await Url.create({
+    title,
     originalUrl: longUrl,
     shortenUrl: shortUrl,
     shortenUrlId: shortenUrlId,
@@ -23,10 +25,11 @@ const shortenUrl = asyncHandler(async (req, res) => {
   });
   if (url) {
     res.status(201).json({
+      id: url._id,
+      title,
       originalUrl: url.originalUrl,
       shortenUrl: url.shortenUrl,
       shortenUrlId: url.shortenUrlId,
-      url,
     });
   } else {
     res.status(500);
@@ -60,4 +63,37 @@ const getUrls = asyncHandler(async (req, res) => {
   }
 });
 
-export { shortenUrl, redirectUrl, getUrls };
+const getUrl = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const url = await Url.findOne({ _id: id });
+
+  if (url) {
+    res.json(url);
+  } else {
+    res.status(404);
+    throw new Error('Url is not found');
+  }
+});
+
+const deleteUrl = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const deleteUrl = await Url.findByIdAndDelete(id);
+  const deleteUrlClicks = await Clicks.deleteMany({
+    url: { $in: [id] },
+  });
+
+  if (deleteUrl) {
+    if (deleteUrlClicks) {
+      res.json(deleteUrl);
+    } else {
+      res.status(404);
+      throw new Error('Something went wrong, while deleting the url clicks');
+    }
+  } else {
+    res.status(404);
+    throw new Error('Url is not found');
+  }
+});
+
+export { shortenUrl, redirectUrl, getUrls, getUrl, deleteUrl };

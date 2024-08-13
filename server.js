@@ -2,10 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import urlRoutes from './routes/urlRoutes.js';
+import clickRoutes from './routes/clickRoutes.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { storeUrlClicks } from './controllers/clickController.js';
 
 dotenv.config();
 
@@ -24,6 +26,8 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRoutes);
 app.use('/url', urlRoutes);
+app.use('/click', clickRoutes);
+app.use('/:shortenurl', storeUrlClicks);
 
 app.use(notFound);
 app.use(errorHandler);

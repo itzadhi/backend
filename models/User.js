@@ -3,15 +3,7 @@ import mongoose from 'mongoose';
 
 const userSchema = mongoose.Schema(
   {
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    userName: {
+    name: {
       type: String,
       required: true,
     },
@@ -23,13 +15,6 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
-    },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    tempPassword: {
-      type: String,
     },
   },
   {

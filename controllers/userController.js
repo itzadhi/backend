@@ -9,7 +9,7 @@ import { sendForgotPasswordMail } from '../utils/sendForgotPasswordMail.js';
 // @route   POST /user/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -19,27 +19,18 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({
-    firstName,
-    lastName,
-    userName: email,
+    name,
     email,
     password,
   });
 
   if (user) {
-    const name = `${user.firstName}  ${user.lastName}`;
-    const email = user.email;
-    const userId = user._id.toString();
-
-    sendActivationMail(name, email, userId);
+    generateToken(res, user._id);
 
     res.status(201).json({
       _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      name: user.name,
       email: user.email,
-      userName: user.userName,
-      isEmailVerified: user.isEmailVerified,
     });
   } else {
     res.status(400);
@@ -56,62 +47,16 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    if (!user?.isEmailVerified) {
-      const name = `${user.firstName}  ${user.lastName}`;
-      const email = user.email;
-      const userId = user._id.toString();
-
-      sendActivationMail(name, email, userId);
-
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        userName: user.userName,
-        isEmailVerified: user.isEmailVerified,
-      });
-    } else {
-      generateToken(res, user._id);
-
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        userName: user.userName,
-        isEmailVerified: user.isEmailVerified,
-      });
-    }
-  } else {
-    res.status(401);
-    throw new Error('Invalid email or password');
-  }
-});
-
-// @desc    Verify User for email verification
-// @route   PUT /user/verify-user
-// @access  Private
-const verifiedUser = asyncHandler(async (req, res) => {
-  const { userId } = req.body;
-
-  const user = await User.findById(userId);
-
-  if (user) {
-    user.isEmailVerified = true;
-
-    await user.save();
-
     generateToken(res, user._id);
 
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      userName: user.userName,
-      isEmailVerified: user.isEmailVerified,
     });
   } else {
-    res.status(404);
-    throw new Error('User not found, please login again');
+    res.status(401);
+    throw new Error('Invalid email or password');
   }
 });
 
@@ -123,68 +68,4 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
-// @desc    New Password
-// @route   PUT /user/new-password
-// @access  Private
-const newPassword = asyncHandler(async (req, res) => {
-  const { tempToken, password } = req.body;
-
-  const user = await User.findOne({ tempPassword: tempToken });
-
-  if (user) {
-    user.tempPassword = '';
-    user.password = password;
-
-    await user.save();
-
-    generateToken(res, user._id);
-
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      userName: user.userName,
-      isEmailVerified: user.isEmailVerified,
-    });
-  } else {
-    res.status(404);
-    throw new Error('Please go to forgot password page, try again');
-  }
-});
-
-// @desc    Forgot Password
-// @route   POST /user/forgot-password
-// @access  Public
-const forgotPassword = asyncHandler(async (req, res) => {
-  const { email } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (user) {
-    const name = `${user.firstName}  ${user.lastName}`;
-    const email = user.email;
-    const tempToken = uuidv4();
-
-    user.tempPassword = tempToken;
-
-    await user.save();
-
-    sendForgotPasswordMail(name, email, tempToken);
-
-    res.json({
-      message: 'Reset password link has been sent to your mail',
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not Found');
-  }
-});
-
-export {
-  registerUser,
-  loginUser,
-  verifiedUser,
-  newPassword,
-  forgotPassword,
-  logoutUser,
-};
+export { registerUser, loginUser, logoutUser };

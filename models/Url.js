@@ -7,6 +7,10 @@ const urlSchema = mongoose.Schema(
       required: true,
       ref: 'User',
     },
+    title: {
+      type: String,
+      required: true,
+    },
     originalUrl: {
       type: String,
       required: true,
