@@ -11,14 +11,11 @@ Frontend Repo - https://github.com/adhit7/url-shortener
 
 ## 📸 Screenshots
 
-Landing Page
-![Landing Page](https://github.com/user-attachments/assets/8cb25384-f2b6-4f17-807d-b8803f3f2699)
+Login Page
+![Landing Page](https://github.com/user-attachments/assets/672400c5-9b8e-439f-8b02-81690abbbc37)
 
-Links Page
-![Links Page](https://github.com/user-attachments/assets/781d4388-80d0-4384-ab57-450d51807a8b)
-
-Create new link
-![Links Page](https://github.com/user-attachments/assets/b24abeb0-aff6-4f79-9d58-29f5a6c4f8f9)
+Learner Home Page
+![Links Page](https://github.com/user-attachments/assets/9ab36d22-61d7-4d1c-b414-8cfcc3838f91)
 
 
 ## Local Setup (Create your own .env file and add your variables in it)
