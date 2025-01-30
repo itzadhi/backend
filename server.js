@@ -9,7 +9,6 @@ import cors from 'cors';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { storeUrlClicks } from './controllers/clickController.js';
 
-//
 dotenv.config();
 
 connectDB();
